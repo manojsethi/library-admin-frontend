@@ -2,45 +2,41 @@
 
 import axiosInstance from "../utils/axios";
 
-// Service to create tenant information with FormData
-export const createTenant = async (tenantData: {
+export const registerTenantUser = async (userData: {
+  email: string;
+  password: string;
   name: string;
-  libraryName: string;
-  userId: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    country: string;
-  };
-  contact: {
-    phone: string;
-    email: string;
-  };
-  logo: File | null; // Include file
+  phone: string;
 }) => {
-  const formData = new FormData();
-
-  formData.append("name", tenantData.name);
-  formData.append("libraryName", tenantData.libraryName);
-  formData.append("userId", tenantData.userId);
-  formData.append("address[street]", tenantData.address.street);
-  formData.append("address[city]", tenantData.address.city);
-  formData.append("address[state]", tenantData.address.state);
-  formData.append("address[country]", tenantData.address.country);
-  formData.append("contact[phone]", tenantData.contact.phone);
-  formData.append("contact[email]", tenantData.contact.email);
-
-  if (tenantData.logo) {
-    formData.append("logo", tenantData.logo); // Append logo file if exists
-  }
-
   try {
-    const response = await axiosInstance.post("/tenants/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const response = await axiosInstance.post("/users/register", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getPaginatedTenants = async (
+  page: number,
+  limit: number,
+  filters = {}
+) => {
+  try {
+    const response = await axiosInstance.post("/users/all", {
+      page,
+      limit,
+      filter: filters,
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Delete a tenant user by ID
+export const deleteTenantUser = async (id: string) => {
+  try {
+    const response = await axiosInstance.delete(`/users/${id}`);
     return response.data;
   } catch (error) {
     throw error;

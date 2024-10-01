@@ -26,13 +26,16 @@ const Header: React.FC<HeaderProps> = ({ location }) => {
         }`}
       >
         {location === "dashboard" && (
-          <button onClick={handleToggleSidebar} className="text-2xl">
+          <button
+            onClick={handleToggleSidebar}
+            className="text-2xl cursor-pointer"
+          >
             <FiMenu />
           </button>
         )}
-        <div className="text-xl font-bold">
-          {location === "public" && "Library Nest"}
-        </div>
+        {location === "public" && (
+          <div className="text-xl font-bold">Library Nest</div>
+        )}
 
         {/* Navigation Links */}
         <nav className="ml-auto">

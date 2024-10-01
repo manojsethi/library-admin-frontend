@@ -1,21 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { useEffect, useRef, useState } from "react";
+import { closeSidebar, toggleSidebar } from "@/store/slices/sidebar.slice";
 import {
   FiHome,
-  FiBarChart,
   FiBox,
   FiTag,
+  FiBarChart,
   FiBook,
-  FiChevronDown, // Arrow icon for submenu
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
-import { useEffect, useRef, useState } from "react";
-import { closeSidebar } from "@/store/slices/sidebar.slice";
+import SidebarMenuItem from "./sidebar-menu-item";
+import { menuItems } from "./sidebar-menu";
+import { motion } from "framer-motion";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const sidebarRef = useRef<HTMLDivElement | null>(null);
-  const [selectedMenu, setSelectedMenu] = useState<string | null>(null); // State to track selected menu
+
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null); // For hover popup
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -35,109 +41,56 @@ const Sidebar = () => {
     };
   }, [isOpen, dispatch]);
 
-  const handleMenuClick = (menuItem: string) => {
-    // Toggle submenu visibility for the selected menu
-    setSelectedMenu((prev) => (prev === menuItem ? null : menuItem));
+  // Function to check if the user has access to a menu item based on roles
+  const hasAccess = (roles: string[]) => {
+    if (!user || !user.roles) return false;
+    return roles.some((role) => user.roles.includes(role));
   };
 
   return (
-    <div
-      ref={sidebarRef}
-      className={`
-          ${isOpen ? "w-64" : "w-16"} 
+    <div className="relative h-full">
+      {/* Sidebar itself */}
+      <div
+        ref={sidebarRef}
+        className={`
+          ${isOpen ? "w-64" : "w-16"}
          bg-gradient-to-b from-violet-500 to-indigo-600 text-white h-full fixed md:relative top-0 left-0 transition-all duration-300 z-50
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
           `}
-    >
-      {/* Sidebar Heading with Logo */}
-      <div className="flex p-4 h-16">
-        <FiBook className="text-3xl  min-w-[24px]" />
-        <span
-          className={`ml-2 transition-all duration-1000 text-lg font-bold ${
-            isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden md:w-auto"
-          }`}
-        >
-          Library Nest
-        </span>
-      </div>
-
-      {/* Menu Items */}
-      <ul className="p-4 space-y-4">
-        {/* Dashboard */}
-        <li className="flex items-center">
-          <FiHome className="text-xl min-w-[24px]" />
-          <span
-            className={`ml-4 transition-all duration-300 ${
-              isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden md:w-auto"
-            }`}
-          >
-            Dashboard
-          </span>
-        </li>
-
-        {/* Products with Submenu */}
-        <li className="flex flex-col items-start">
-          <div
-            className="flex items-center justify-between w-full cursor-pointer"
-            onClick={() => handleMenuClick("products")}
-          >
-            <div className="flex items-center">
-              <FiBox className="text-xl min-w-[24px]" />
-              <span
-                className={`ml-4 transition-all duration-300 ${
-                  isOpen
-                    ? "opacity-100"
-                    : "opacity-0 w-0 overflow-hidden md:w-auto"
-                }`}
-              >
-                Products
-              </span>
-            </div>
-            {/* Arrow icon that rotates based on submenu visibility */}
-            {isOpen && (
-              <FiChevronDown
-                className={`text-xl transition-transform duration-300 ${
-                  selectedMenu === "products" ? "rotate-180" : ""
-                }`}
-              />
-            )}
+      >
+        {/* Sidebar Heading with Logo */}
+        <div className="flex p-4 h-16 items-center justify-between">
+          <div className="flex items-center">
+            <FiBook className="text-3xl min-w-[24px]" />
+            <motion.span
+              initial={{ opacity: 0, width: 0 }}
+              animate={{
+                opacity: isOpen ? 1 : 0,
+                width: isOpen ? "auto" : 0,
+              }}
+              transition={{ duration: 0.5 }}
+              className="ml-2 text-lg font-bold text-nowrap overflow-hidden"
+            >
+              Library Nest
+            </motion.span>
           </div>
+        </div>
 
-          {/* Submenu for Products */}
-          {selectedMenu === "products" && isOpen && (
-            <ul className="ml-8 space-y-2 text-sm mt-2">
-              <li className="flex items-center">Product 1</li>
-              <li className="flex items-center">Product 2</li>
-              <li className="flex items-center">Product 3</li>
-            </ul>
-          )}
-        </li>
-
-        {/* Statistics */}
-        <li className="flex items-center">
-          <FiBarChart className="text-xl min-w-[24px]" title="Statistics" />
-          <span
-            className={`ml-4 transition-all duration-300 ${
-              isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden md:w-auto"
-            }`}
-          >
-            Statistics
-          </span>
-        </li>
-
-        {/* Offers */}
-        <li className="flex items-center">
-          <FiTag className="text-xl min-w-[24px]" />
-          <span
-            className={`ml-4 transition-all duration-300 ${
-              isOpen ? "opacity-100" : "opacity-0 w-0 overflow-hidden md:w-auto"
-            }`}
-          >
-            Offers
-          </span>
-        </li>
-      </ul>
+        {/* Dynamic Menu Items */}
+        <ul className="mt-2">
+          {menuItems.map((item, index) => (
+            <SidebarMenuItem
+              key={index}
+              item={item}
+              isOpen={isOpen}
+              hasAccess={hasAccess} // Pass the role-based access function
+              setHoveredItem={setHoveredItem}
+              hoveredItem={hoveredItem}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
