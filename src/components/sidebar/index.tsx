@@ -1,19 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
+import { clearCredentials } from "@/store/slices/auth.slice";
+import { closeSidebar } from "@/store/slices/sidebar.slice";
 import { RootState } from "@/store/store";
-import { useEffect, useRef, useState } from "react";
-import { closeSidebar, toggleSidebar } from "@/store/slices/sidebar.slice";
-import {
-  FiHome,
-  FiBox,
-  FiTag,
-  FiBarChart,
-  FiBook,
-  FiChevronLeft,
-  FiChevronRight,
-} from "react-icons/fi";
-import SidebarMenuItem from "./sidebar-menu-item";
-import { menuItems } from "./sidebar-menu";
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { FiBook, FiLogOut } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { menuItems } from "./sidebar-menu";
+import SidebarMenuItem from "./sidebar-menu-item";
+import { logoutUser } from "@/api/auth.service";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
@@ -22,6 +16,11 @@ const Sidebar = () => {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
 
   const [hoveredItem, setHoveredItem] = useState<string | null>(null); // For hover popup
+
+  const handleLogout = () => {
+    logoutUser();
+    dispatch(clearCredentials());
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -90,6 +89,18 @@ const Sidebar = () => {
             />
           ))}
         </ul>
+        <div
+          className={`absolute bottom-0 rounded-md items-center w-full cursor-pointer pl-3 py-2`}
+        >
+          <div className="flex items-center w-full ml-3" onClick={handleLogout}>
+            <span className="text-xl min-w-[24px]">
+              <FiLogOut />
+            </span>
+            {isOpen && (
+              <span className="ml-4 transition-all duration-300">Logout</span>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
