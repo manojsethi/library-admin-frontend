@@ -27,32 +27,29 @@ export default function SecureLayout({
     )}`.replace(/\/$/, "");
   };
 
-  const findRolesForPath = (
-    items: any[],
-    parentUrl: string = ""
-  ): string[] | null => {
-    let matchedRoles: string[] | null = null;
+  const findRolesForPath = (items: any[], parentUrl: string = ""): string[] => {
+    let matchedRoles = new Set<string>();
 
     for (const item of items) {
       const fullUrl = buildFullUrl(parentUrl, item.url || "");
 
-      // Continue searching even if the fullUrl matches, only return after full check
+      // If the full URL matches, add the roles
       if (fullUrl === pathName) {
-        matchedRoles = item.roles; // Store the roles but keep searching
+        item.roles.forEach((role: string) => matchedRoles.add(role)); // Add roles to the Set
       }
 
+      // Check if there are submenus and recursively find roles for the path
       if (item.submenu) {
-        const rolesInSubmenu = findRolesForPath(item.submenu, fullUrl);
-        if (rolesInSubmenu) {
-          return rolesInSubmenu; // Immediately return if submenu has a match
-        }
+        const submenuRoles = findRolesForPath(item.submenu, fullUrl);
+        submenuRoles.forEach((role) => matchedRoles.add(role));
       }
     }
 
-    return matchedRoles; // Only return after all checks are complete
+    return Array.from(matchedRoles); // Return all matched roles, including nested ones
   };
 
   const hasAccess = (allowedRoles: string[]) => {
+    debugger;
     return allowedRoles.some((role) => user?.roles.includes(role));
   };
   useEffect(() => {

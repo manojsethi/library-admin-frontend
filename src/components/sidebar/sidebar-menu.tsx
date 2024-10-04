@@ -42,7 +42,7 @@ export const menuItems = [
     ],
   },
   {
-    title: "Entities",
+    title: "Tenant Entities",
     roles: ["admin"],
     url: "/tenants/entities",
     icon: <FiList />,
