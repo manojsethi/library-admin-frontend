@@ -17,7 +17,7 @@ export const menuItems = [
   },
   {
     title: "Dashboard",
-    url: "/tenant-dashboard",
+    url: "/tenants/dashboard",
     roles: ["tenant-admin"],
     icon: <FiHome />, // Home icon for Tenant Dashboard
   },
@@ -44,13 +44,13 @@ export const menuItems = [
   {
     title: "Entities",
     roles: ["admin"],
-    url: "/entities",
+    url: "/tenants/entities",
     icon: <FiList />,
   },
   {
-    title: "Entities",
+    title: "Tenant Entities",
     roles: ["tenant-admin"],
-    url: "/entities",
+    url: "/tenants/entities",
     icon: <FiBox />, // Box icon for Entities section
     submenu: [
       {

@@ -1,5 +1,5 @@
 "use client";
-import { createEntity } from "@/api/entity.service";
+import { createTenantEntity } from "@/api/tenant-entity.service";
 import DragDropField from "@/components/form/drag-drop-field"; // Import DragDropField
 import FormField from "@/components/form/form-field";
 import FormStep from "@/components/form/form-step";
@@ -27,7 +27,7 @@ interface EntityFormInputs {
   logo: File[];
 }
 
-const AddEntityPage: React.FC = () => {
+const AddTenantEntityPage: React.FC = () => {
   const [current, setCurrent] = useState(0); // Tracks current step
   const router = useRouter();
   const [logoFile, setLogoFile] = useState<File | null>(null); // Store the uploaded logo
@@ -61,9 +61,9 @@ const AddEntityPage: React.FC = () => {
         logo: logoFile,
       };
 
-      const response = await createEntity(entityData);
-      message.success("Entity Created!");
-      router.push("/dashboard");
+      const response = await createTenantEntity(entityData);
+      message.success("Tenant Entity Created!");
+      router.push("/tenants/entities");
     } catch (error) {
       console.error("Entity registration failed");
     }
@@ -175,4 +175,4 @@ const AddEntityPage: React.FC = () => {
   return <Stepper steps={steps} currentStep={current} />;
 };
 
-export default AddEntityPage;
+export default AddTenantEntityPage;

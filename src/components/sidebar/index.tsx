@@ -80,7 +80,8 @@ const Sidebar = () => {
         <ul className="mt-2">
           {menuItems.map((item, index) => (
             <SidebarMenuItem
-              key={index}
+              key={`sidebar_${index}`}
+              menuKey={index}
               item={item}
               isOpen={isOpen}
               hasAccess={hasAccess} // Pass the role-based access function
@@ -90,7 +91,7 @@ const Sidebar = () => {
           ))}
         </ul>
         <div
-          className={`absolute bottom-0 rounded-md items-center w-full cursor-pointer pl-3 py-2`}
+          className={`absolute bottom-5 rounded-md items-center w-full cursor-pointer pl-3 py-2`}
         >
           <div className="flex items-center w-full ml-3" onClick={handleLogout}>
             <span className="text-xl min-w-[24px]">

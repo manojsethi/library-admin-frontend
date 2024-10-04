@@ -17,7 +17,7 @@ export interface MenuItem {
 interface SidebarMenuItemProps {
   item: MenuItem;
   isOpen: boolean;
-  key: any;
+  menuKey: any;
   hasAccess: (roles: string[]) => boolean; // Function to check role-based access
   setHoveredItem: React.Dispatch<React.SetStateAction<string | null>>;
   hoveredItem: string | null;
@@ -27,7 +27,7 @@ interface SidebarMenuItemProps {
 
 const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
   item,
-  key,
+  menuKey,
   isOpen,
   hasAccess,
   setHoveredItem,
@@ -66,7 +66,7 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
 
   return (
     <li
-      key={key}
+      key={menuKey}
       className={`flex flex-col p-2 relative ${
         expanded ? "bg-purple-300 bg-opacity-20" : ""
       } ${isSubmenu ? "ml-2" : ""}`} // Add margin-left for submenus

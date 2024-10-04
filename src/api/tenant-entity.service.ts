@@ -3,7 +3,7 @@
 import axiosInstance from "../utils/axios";
 
 // Service to create tenant information with FormData
-export const createEntity = async (entityData: {
+export const createTenantEntity = async (entityData: {
   name: string;
   libraryName: string;
   address: {
@@ -34,10 +34,31 @@ export const createEntity = async (entityData: {
   }
 
   try {
-    const response = await axiosInstance.post("/tenants/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    const response = await axiosInstance.post(
+      "/tenant-entities/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getPaginatedTenantEntities = async (
+  page: number,
+  limit: number,
+  filters = {}
+) => {
+  try {
+    const response = await axiosInstance.post("/tenant-entities/all", {
+      page,
+      limit,
+      filter: filters,
     });
     return response.data;
   } catch (error) {
