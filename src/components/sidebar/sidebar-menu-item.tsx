@@ -67,25 +67,27 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = ({
   return (
     <li
       key={menuKey}
-      className={`flex flex-col p-2 relative ${
-        expanded ? "bg-purple-300 bg-opacity-20" : ""
+      className={`flex flex-col p-2 pr-0 relative ${
+        expanded ? "bg-indigo-600 bg-opacity-10" : ""
       } ${isSubmenu ? "ml-2" : ""}`} // Add margin-left for submenus
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div
         className={`flex ${
-          !expanded && pathname == fullUrl ? "bg-purple-950 bg-opacity-40" : ""
+          !expanded && pathname == fullUrl
+            ? "text-indigo-600 font-bold border-r-2 border-indigo-600"
+            : "text-gray-600"
         } ${
           !expanded && pathname != fullUrl
-            ? "hover:bg-purple-950 hover:bg-opacity-20"
+            ? "hover:bg-indigo-200 hover:bg-opacity-20"
             : ""
-        } rounded-md items-center justify-between w-full cursor-pointer pl-3 py-2`}
+        } items-center justify-between w-full cursor-pointer pl-3 py-2`}
         onClick={item.submenu ? toggleSubmenu : undefined} // Toggle submenu on chevron click
       >
         <div className="flex items-center w-full">
           {item.icon && (
-            <span className="text-xl min-w-[24px]">{item.icon}</span>
+            <span className={`text-xl min-w-[24px]`}>{item.icon}</span>
           )}
 
           {/* Show title and link only when sidebar is open */}

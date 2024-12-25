@@ -53,14 +53,14 @@ const Sidebar = () => {
         ref={sidebarRef}
         className={`
           ${isOpen ? "w-64" : "w-16"}
-         bg-gradient-to-b from-violet-500 to-indigo-600 text-white h-full fixed md:relative top-0 left-0 transition-all duration-300 z-50
+         bg-white h-full fixed md:relative top-0 left-0 transition-all duration-300 z-50
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
           `}
       >
         {/* Sidebar Heading with Logo */}
         <div className="flex p-4 h-16 items-center justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center text-indigo-600">
             <FiBook className="text-3xl min-w-[24px]" />
             <motion.span
               initial={{ opacity: 0, width: 0 }}

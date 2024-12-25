@@ -49,7 +49,6 @@ export default function SecureLayout({
   };
 
   const hasAccess = (allowedRoles: string[]) => {
-    debugger;
     return allowedRoles.some((role) => user?.roles.includes(role));
   };
   useEffect(() => {
@@ -83,7 +82,7 @@ export default function SecureLayout({
           <Header location="dashboard" />
 
           {/* Scrollable Content Area */}
-          <main className="flex-1 overflow-y-auto p-4 bg-gray-100">
+          <main className="flex-1 overflow-y-auto p-4 bg-[#F4F7FE]">
             {children}
           </main>
 

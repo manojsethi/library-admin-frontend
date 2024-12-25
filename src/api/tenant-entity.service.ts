@@ -10,7 +10,7 @@ export const createTenantEntity = async (entityData: {
     street: string;
     city: string;
     state: string;
-    country: string;
+    pincode: string;
   };
   contact: {
     phone: string;
@@ -25,14 +25,14 @@ export const createTenantEntity = async (entityData: {
   formData.append("address[street]", entityData.address.street);
   formData.append("address[city]", entityData.address.city);
   formData.append("address[state]", entityData.address.state);
-  formData.append("address[country]", entityData.address.country);
+  formData.append("address[pincode]", entityData.address.pincode);
   formData.append("contact[phone]", entityData.contact.phone);
   formData.append("contact[email]", entityData.contact.email);
 
   if (entityData.logo) {
     formData.append("logo", entityData.logo); // Append logo file if exists
   }
-
+  debugger;
   try {
     const response = await axiosInstance.post(
       "/tenant-entities/create",

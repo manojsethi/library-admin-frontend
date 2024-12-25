@@ -54,11 +54,15 @@ const SidebarSubMenu: React.FC<SidebarSubMenuProps> = ({
             }`}
           >
             <div
-              className={`flex items-center w-full cursor-pointer px-2 py-1 rounded-md ${
+              className={`flex items-center w-full cursor-pointer px-2 py-1 ${
                 !expandedStates[subItem.title] && pathname != fullUrl
-                  ? "hover:bg-purple-950 hover:bg-opacity-20"
+                  ? "hover:bg-indigo-700 hover:bg-opacity-20"
                   : ""
-              } ${pathname == fullUrl ? "bg-purple-950 bg-opacity-40" : ""}`}
+              } ${
+                pathname == fullUrl
+                  ? "text-indigo-600 font-bold border-r-2 border-indigo-600"
+                  : "text-gray-600"
+              }`}
             >
               {subItem.icon && (
                 <span className="text-xl min-w-[24px]">{subItem.icon}</span>

@@ -1,11 +1,17 @@
 "use client";
-import { getPaginatedTenantEntities } from "@/api/tenant-entity.service";
+import {
+  createTenantEntity,
+  getPaginatedTenantEntities,
+} from "@/api/tenant-entity.service";
 import { deleteTenantUser, getPaginatedTenants } from "@/api/tenant.service";
+import AddTenantEntityForm from "@/components/form/add-tenant-entity";
+import { AddTenantEntityFormData } from "@/components/form/add-tenant-entity/tenant-entity-validation.schema";
 import TextFilterDropdown from "@/components/table/filters/text.filter";
 import { SearchOutlined } from "@ant-design/icons";
 import { Table, TableProps, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { FiTrash } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 interface TenantEntityDataType {
   key?: string;
@@ -39,6 +45,34 @@ const TenantEntitiesListPage: React.FC = () => {
     total: 0,
   });
   const [filters, setFilters] = useState<{ [key: string]: any }>({});
+
+  const onAddTenantEntityFormSubmit = async (
+    data: AddTenantEntityFormData,
+    logoFile: File | null
+  ) => {
+    try {
+      const entityData = {
+        ...data,
+        logo: logoFile,
+      };
+
+      await createTenantEntity(entityData);
+      toast.success(
+        <div>
+          <strong>Success!</strong>
+          <p>Entity Registered Successfully!</p>
+        </div>
+      );
+      if (pagination.current == 1) fetchData();
+    } catch (error) {
+      toast.error(
+        <div>
+          <strong>Error!</strong>
+          <p>Please fix the error or contact support!</p>
+        </div>
+      );
+    }
+  };
 
   const fetchData = async (updatedFilters = filters) => {
     setLoading(true);
@@ -190,7 +224,10 @@ const TenantEntitiesListPage: React.FC = () => {
 
   return (
     <>
-      <h2 className="text-lg font-bold mb-2">Tenants</h2>
+      <div className="border-indigo-600 border-[1px] border-opacity-20 rounded-md p-2 mb-5">
+        <AddTenantEntityForm onSubmit={onAddTenantEntityFormSubmit} />
+      </div>
+      <h2 className="text-lg font-bold mb-2">Entities</h2>
       <Table<TenantEntityDataType>
         columns={columns}
         dataSource={data}

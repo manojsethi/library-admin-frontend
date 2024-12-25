@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ location }) => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-violet-500 to-indigo-600 text-white p-4 shadow-lg">
+    <header className="bg-indigo-600 text-white p-4 shadow-lg">
       <div
         className={`flex justify-between items-center ${
           location === "public" ? "container mx-auto" : ""
@@ -41,19 +41,19 @@ const Header: React.FC<HeaderProps> = ({ location }) => {
         <nav className="ml-auto">
           <ul className="flex space-x-4 items-center">
             <li>
-              <Link href="/" className="hover:underline">
+              <Link href="/" className="hover:underline font-bold">
                 Home
               </Link>
             </li>
             {!user && (
               <>
                 <li>
-                  <Link className="hover:underline" href="/login">
+                  <Link className="hover:underline font-bold" href="/login">
                     Login
                   </Link>
                 </li>
                 <li>
-                  <Link href="/invite" className="hover:underline">
+                  <Link href="/invite" className="hover:underline font-bold">
                     Get Invite
                   </Link>
                 </li>
@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ location }) => {
             )}
             {user && (
               <li>
-                <Link className="hover:underline" href="/dashboard">
+                <Link className="hover:underline font-bold" href="/dashboard">
                   Dashboard
                 </Link>
               </li>

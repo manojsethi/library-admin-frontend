@@ -1,10 +1,17 @@
 "use client";
-import { deleteTenantUser, getPaginatedTenants } from "@/api/tenant.service";
+import {
+  deleteTenantUser,
+  getPaginatedTenants,
+  registerTenantUser,
+} from "@/api/tenant.service";
+import AddTenantForm from "@/components/form/add-tenant";
+import { AddTenantFormData } from "@/components/form/add-tenant/tenant-validation.schema";
 import TextFilterDropdown from "@/components/table/filters/text.filter";
 import { SearchOutlined } from "@ant-design/icons";
 import { Table, TableProps, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { FiTrash } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 interface TenantDataType {
   key: string;
@@ -65,6 +72,26 @@ const TenantListPage: React.FC = () => {
     console.log("Deleting record with key:", key);
     await deleteTenantUser(key);
     fetchData();
+  };
+
+  const onAddTenantFormSubmit = async (data: AddTenantFormData) => {
+    try {
+      await registerTenantUser(data);
+      toast.success(
+        <div>
+          <strong>Success!</strong>
+          <p>Registration successful!</p>
+        </div>
+      );
+      if (pagination.current == 1) fetchData();
+    } catch (error) {
+      toast.error(
+        <div>
+          <strong>Error!</strong>
+          <p>Please fix the error or contact support!</p>
+        </div>
+      );
+    }
   };
 
   const columns: TableProps<TenantDataType>["columns"] = [
@@ -155,6 +182,9 @@ const TenantListPage: React.FC = () => {
 
   return (
     <>
+      <div className="border-indigo-600 border-[1px] border-opacity-20 rounded-md p-2 mb-5">
+        <AddTenantForm onSubmit={onAddTenantFormSubmit} />
+      </div>
       <h2 className="text-lg font-bold mb-2">Tenants</h2>
       <Table<TenantDataType>
         columns={columns}

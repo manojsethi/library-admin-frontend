@@ -25,21 +25,7 @@ export const menuItems = [
     title: "Tenants",
     roles: ["admin"],
     url: "/tenants",
-    icon: <FiUsers />, // Users icon for Tenants section
-    submenu: [
-      {
-        title: "List",
-        url: "/",
-        roles: ["admin"],
-        icon: <FiList />, // List icon for listing tenants
-      },
-      {
-        title: "Add",
-        url: "/add",
-        roles: ["admin"],
-        icon: <FiPlusCircle />,
-      },
-    ],
+    icon: <FiUsers />,
   },
   {
     title: "Tenant Entities",
@@ -48,7 +34,7 @@ export const menuItems = [
     icon: <FiList />,
   },
   {
-    title: "Tenant Entities",
+    title: "Entities",
     roles: ["tenant-admin"],
     url: "/tenants/entities",
     icon: <FiBox />, // Box icon for Entities section
